@@ -18,7 +18,13 @@ const pusher = new Pusher({
 });
 
 // Middlewares
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors(
+    {
+        origin: ["https://whatsapp-mern-api.vercel.app"],
+        methods: ["POST", "GET"],
+        credentials: true
+    }
+));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
