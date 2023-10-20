@@ -12,17 +12,19 @@ export default function Chat() {
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef?.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("messages/sync")
-      .then((response) => setMessages(response.data))
-      .then(() => scrollToBottom());
+    const getInitial = async () => {
+      const response = await axios.get("messages/sync");
+      setMessages(response.data);
+      scrollToBottom();
+    };
+    getInitial();
   }, []);
 
   const sendMessage = async (e) => {
@@ -36,7 +38,7 @@ export default function Chat() {
 
     messages.push(newMessage);
     scrollToBottom();
-    
+
     await axios.post("/messages/new", newMessage);
   };
 
